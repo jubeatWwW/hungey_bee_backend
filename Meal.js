@@ -1,8 +1,29 @@
+let DB = require('./DB');
+
 class Meal{
     constructor(meal){
-        console.log(meal);
+    }
+    
+    Provide(data){
+        data.remain = data.count;
+        let db = new DB();
+        if(data.item !== "---")
+            data.name = data.item;
+        delete data.item;
+        db.Insert("Provide", data);
     }
 
+    Need(data){
+        let db = new DB();
+        db.Insert("Need", data);
+    }
+
+    Get(cb){
+        let db = new DB();
+        db.GetMeal((result) => {
+            cb(result);
+        });  
+    }
 
 }
 

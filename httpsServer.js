@@ -14,6 +14,9 @@ let Session = require('express-session');
 let User = require('./User');
 let user = new User();
 
+let Meal = require('./Meal');
+let meal = new Meal();
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use((req, res, next) => {
@@ -37,8 +40,26 @@ app.get('/', (req, res) => {
     res.send(req.session);
 });
 
-app.post('/meal', upload.array(),(req, res, next) => {
+app.post('/provide', upload.array(),(req, res, next) => {
+    let data = req.body;
+    if(!req.session.isLogin){
+        res.send({isLogin: false});
+    } else {
+        data.userId = req.session.userInfo.id;
+        meal.Provide(data);
+        res.send(data);
+    }
+});
+
+app.post('/need', upload.array(),(req, res, next) => {
+    meal.Need(req.body);
     res.send(req.body);
+});
+
+app.get('/meal', (req, res) => {
+    meal.Get( (result) => {
+        res.send(result);
+    });
 });
 
 app.post('/register', upload.array(), (req, res, next) => {
@@ -50,7 +71,7 @@ app.post('/login', upload.array(), (req, res, next) => {
     user.Login(req.body, (result, isLogin) => {
         req.session.isLogin = isLogin
         req.session.userInfo = result;
-        res.send(isLogin);
+        res.send(result);
     });
 });
 
@@ -70,8 +91,15 @@ app.post('/edit', upload.array(), (req, res, next) => {
         res.send({stillLogin: false, update: false});
     else{
         user.Edit(email, req.body, (update) => {
-            update.stillLogin = true;
-            res.send(update);
+            if(update.update){
+                update.stillLogin = true;
+                Object.keys(req.body).map((key) =>{
+                    console.log(key);
+                    req.session.userInfo[key] = req.body[key];
+                });
+                console.log(req.session);
+                res.send(update);
+            }
         });
     }
 });

@@ -6,7 +6,7 @@ class User{
 
     Register(data){
         let db = new DB();
-        db.Insert(data);   
+        db.Insert('User', data);   
     }
     
     Edit(user, data, cb){
@@ -20,8 +20,8 @@ class User{
         if(data.passwd === ""){
             delete data.passwd;
         }
-        db.Edit(user, data, (update) => {
-            cb(update);
+        db.Edit(user, data, (result) => {
+            cb(result);
         });
     }
 
