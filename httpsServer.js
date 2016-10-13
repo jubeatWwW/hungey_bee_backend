@@ -75,6 +75,12 @@ app.post('/login', upload.array(), (req, res, next) => {
     });
 });
 
+app.post('/logout', upload.array(), (req, res, next) => {
+    req.session.isLogin = false;
+    req.session.userInfo = {};
+    res.send("logout");
+});
+
 app.get('/loginChk', (req, res) => {
     if(!req.session.userInfo){
         req.session.userInfo = {};
