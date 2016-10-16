@@ -2,6 +2,7 @@
 
 const letsencrypt = require('./lex');
 const express = require('express');
+const helmet = require('helmet');
 
 const multer = require('multer');
 const bodyParser = require('body-parser');
@@ -17,6 +18,7 @@ let user = new User();
 let Meal = require('./Meal');
 let meal = new Meal();
 
+app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use((req, res, next) => {
@@ -114,6 +116,6 @@ letsencrypt.create({
     server: 'https://acme-v01.api.letsencrypt.org/directory',
     email: 'l6104400@gmail.com',
     agreeTos: true,
-    approveDomains: ['jubeatdb.nctucs.net'],
+    approveDomains: ['jubeatdb.nctucs.net', 'jubeatwww.nctucs.net'],
     app: app
 }).listen(80, 443);
