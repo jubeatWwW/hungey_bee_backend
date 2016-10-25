@@ -2,6 +2,7 @@
 
 const letsencrypt = require('./lex');
 const express = require('express');
+const helmet = require('helmet');
 
 const multer = require('multer');
 const bodyParser = require('body-parser');
@@ -17,6 +18,10 @@ let user = new User();
 let Meal = require('./Meal');
 let meal = new Meal();
 
+let Opendata = require('./Opendata');
+let opendata= new Opendata();
+
+app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use((req, res, next) => {
@@ -56,8 +61,14 @@ app.post('/need', upload.array(),(req, res, next) => {
     res.send(req.body);
 });
 
+app.get('/need', upload.array(),(req, res, next) => {
+    meal.Get((result) => {
+        res.send(result);
+    });
+});
+
 app.get('/meal', (req, res) => {
-    meal.Get( (result) => {
+    meal.GetMeal( (result) => {
         res.send(result);
     });
 });
@@ -108,6 +119,12 @@ app.post('/edit', upload.array(), (req, res, next) => {
             }
         });
     }
+});
+
+app.get('/opendata', (req, res, next) => {
+    opendata.GetInfo((result) => {
+        res.send(result);
+    });      
 });
 
 letsencrypt.create({

@@ -20,6 +20,13 @@ class Meal{
 
     Get(cb){
         let db = new DB();
+        db.Get("Need", (result) =>{
+            cb(result);
+        });
+    }
+
+    GetMeal(cb){
+        let db = new DB();
         db.GetMeal((result) => {
             cb(result);
         });  
