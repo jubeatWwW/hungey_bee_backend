@@ -18,6 +18,9 @@ let user = new User();
 let Meal = require('./Meal');
 let meal = new Meal();
 
+let Opendata = require('./Opendata');
+let opendata= new Opendata();
+
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -58,8 +61,14 @@ app.post('/need', upload.array(),(req, res, next) => {
     res.send(req.body);
 });
 
+app.get('/need', upload.array(),(req, res, next) => {
+    meal.Get((result) => {
+        res.send(result);
+    });
+});
+
 app.get('/meal', (req, res) => {
-    meal.Get( (result) => {
+    meal.GetMeal( (result) => {
         res.send(result);
     });
 });
@@ -112,10 +121,16 @@ app.post('/edit', upload.array(), (req, res, next) => {
     }
 });
 
+app.get('/opendata', (req, res, next) => {
+    opendata.GetInfo((result) => {
+        res.send(result);
+    });      
+});
+
 letsencrypt.create({
     server: 'https://acme-v01.api.letsencrypt.org/directory',
     email: 'l6104400@gmail.com',
     agreeTos: true,
-    approveDomains: ['jubeatdb.nctucs.net', 'jubeatwww.nctucs.net'],
+    approveDomains: ['jubeatdb.nctucs.net'],
     app: app
 }).listen(80, 443);
