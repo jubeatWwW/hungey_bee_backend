@@ -32,6 +32,12 @@ class Meal{
         });  
     }
 
+    Bargain(provide, need, cb){
+        console.log(provide);
+        console.log(need);
+        cb();
+    }
+
 }
 
 module.exports = Meal;
