@@ -73,6 +73,17 @@ app.get('/meal', (req, res) => {
     });
 });
 
+app.post('/meal', upload.array(), (req, res, next)=>{
+    let provide = req.session.userInfo;
+    meal.Bargain(provide, req.body, (err, result)=>{
+        console.log("bargain");
+        if(err)
+            res.send(err);
+        else
+            res.send(result);
+    }); 
+});
+
 app.post('/register', upload.array(), (req, res, next) => {
     user.Register(req.body);
     res.send(req.body);

@@ -32,6 +32,17 @@ class Meal{
         });  
     }
 
+    Bargain(provide, need, cb){
+        let db = new DB();
+        let orderDB = new DB();
+        
+        db.MealUpdate(need.mealId, need.count, (err, result)=>{
+            orderDB.OrderInsert(need, (err, result)=>{
+                cb(err, result);
+            });
+        });
+    }
+
 }
 
 module.exports = Meal;
